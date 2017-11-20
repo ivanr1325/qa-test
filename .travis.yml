@@ -8,4 +8,4 @@ rvm: # the Ruby versions to be used
 
 before_install:
   - gem install watir-webdriver
-  - gem intall chromedriver-helper
+  - gem install chromedriver-helper
