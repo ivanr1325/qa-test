@@ -1,6 +1,4 @@
 require 'watir-webdriver'
-require 'watir-webdriver-performance'
-require 'cucumber'
 b = Watir::Browser.new :chrome
 
 b.window.resize_to(1024,768)
