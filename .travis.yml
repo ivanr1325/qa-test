@@ -1,13 +1,17 @@
 Sample .travis.yml file:
 language: ruby
+os: osx
 
 rvm: # the Ruby versions to be used
   - 2.3.1
 
+addons:
+  chrome: stable
+
 before_install:
   - gem install watir-webdriver
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-  - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
-  - Selenium::WebDriver::Chrome.driver_path = <path to chromedriver>
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
