@@ -1,17 +1,10 @@
-Sample .travis.yml file:
+# Sample .travis.yml file:
 language: ruby
-os: osx
 
 rvm: # the Ruby versions to be used
-  - 2.3.1
-
-addons:
-  chrome: stable
+  - 2.1.0
+  - 2.0.0
+  - 1.9.3
 
 before_install:
   - gem install watir-webdriver
-
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
