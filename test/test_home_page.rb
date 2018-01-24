@@ -1,4 +1,6 @@
-#require 'watir-webdriver'
+require 'watir-webdriver'
+require 'test/unit'
+
 #b = Watir::Browser.new :chrome
 
 #b.window.resize_to(1024,768)
