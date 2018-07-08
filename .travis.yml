@@ -1,8 +1,23 @@
 # Sample .travis.yml file:
+#
+
+dist: trusty
+
+sudo: required
+
 language: ruby
+
+before_install:
+  - gem install bundler
+  - "rm ${BUNDLE_GEMFILE}.lock"
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+
+  cache: bundler
 
 rvm: # the Ruby versions to be used
   - 2.3.0
 
-before_install:
-  - gem install watir-webdriver
+addons:
+  chrome: stable
+
+
