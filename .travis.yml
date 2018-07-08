@@ -24,7 +24,7 @@ addons:
 #script: bundle exec cucumber
 
 before_script:
-   #- bundle install
+   - bundle install
    - gem install watir
    - gem install colorize
    - gem install rspec
