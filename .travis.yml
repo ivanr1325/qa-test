@@ -21,7 +21,7 @@ addons:
       - google-chrome-stable
 
 
-script: bundle exec cucumber
+#script: bundle exec cucumber
 
 before_script:
    #- bundle install
