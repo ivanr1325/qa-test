@@ -7,6 +7,9 @@ language: ruby
 
 dist: trusty
 
+gemfile: 
+  - Gemfile
+
 rvm: # the Ruby versions to be used
   - 2.3.0
 
