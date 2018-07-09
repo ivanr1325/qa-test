@@ -42,11 +42,5 @@ before_script:
   - RAILS_ENV=development bundle exec rake config:generate
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-branches:
-  only:
-    - /^(\d+\.(\d+|x.*))$/
-    - /^feature\/\w+$/
-notifications:
-  slack: amco:eBhA18hVc6GVGnC7k0SfOtYy
 after_success:
   - ./bin/deploy.sh || travis_assert
