@@ -1,42 +1,52 @@
-# Sample .travis.yml file:
-#
-
-sudo: required
-
+bundler_args: --without development --deployment
+cache:
+  - bundler
+  - yarn
+sudo: false
 language: ruby
+rvm:
+  - 2.3.1
+env:
+  global:
+    - CXX=g++-5
+    - secure: imrWb3p4bNE4L8A3CN/i9wuAjDXul4MLMySSq+OkkWM+qUe8P7GsJyRNRbSxTdajZpQPzjAGnbzbmTgSYWGwrLK04+YHvigI/K4GzKoAwu367kRuIYe+SjSxHbIyLJyEHZ7yuNODCQZw8ivica9Dg121Cs20XXX0SKvyA/VutU0=
 
-dist: trusty
+before_install:
+  - nvm install node
+services:
+  - couchdb
+  - redis-server
 
-gemfile: 
-  - Gemfile
-
-rvm: # the Ruby versions to be used
-  - 2.3.0
-
+# from https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Node.js-v4-(or-io.js-v3)-compiler-requirements
 addons:
   apt:
     sources:
-       - google-chrome
+      - ubuntu-sdk-team
+      - ubuntu-toolchain-r-test
+      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
     packages:
-      - google-chrome-stable
-
-
-#script: bundle exec cucumber
+      - g++-5
+      - yarn
+      - libqtwebkit-dev
 
 before_script:
-   - bundle install
-   - gem install watir
-   - gem install colorize
-   - gem install rspec
-   - gem install cucumber
-   - gem install rake
-   - gem install chromium
-   - wget http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
-   - unzip chromedriver_linux64.zip
-   - sudo apt-get install libnss3
-   - sudo apt-get --only-upgrade install google-chrome-stable
-   - sudo cp chromedriver /usr/local/bin/.
-   - sudo chmod +x /usr/local/bin/chromedriver
-   - export DISPLAY=:99.0
-   - sh -e /etc/init.d/xvfb start
-   - sleep 3
+  - nvm use 8.9.1
+  - npm i -g yarn && yarn
+  - cd spec/karma && npm install && cd ../../
+  - curl -X PUT localhost:5984/av_test
+  - curl -X PUT localhost:5984/av_sess_test
+  - curl -X PUT localhost:5984/aid_test
+  - curl -X PUT localhost:5984/doris_test
+  - mkdir -p tmp/cache
+  - RAILS_ENV=development bundle exec rake config:generate
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+branches:
+  only:
+    - /^(\d+\.(\d+|x.*))$/
+    - /^feature\/\w+$/
+notifications:
+  slack: amco:eBhA18hVc6GVGnC7k0SfOtYy
+after_success:
+  - ./bin/deploy.sh || travis_assert
